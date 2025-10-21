@@ -87,6 +87,9 @@ def clean_data(csv):
     # Remove duplicate SMILES entries
     data = data_trunc.drop_duplicates(subset=['Canonical SMILES'], keep='first').reset_index(drop=True)
 
+    # Remove rows where canonical SMILES could not be generated
+    data = data.dropna(subset=['Canonical SMILES']).reset_index(drop=True)
+
     # Save cleaned DataFrame to a new CSV file
     data.to_csv('cleaned_pfas_list.csv', index=False)
 
