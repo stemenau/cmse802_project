@@ -1,3 +1,6 @@
+# Data: PFAS Master List of PFAS Substances (RETIRED) https://comptox.epa.gov/dashboard/chemical-lists/pfasmaster 
+# Dataset downloaded as 'Chemical List pfasmaster-2025-09-13.csv'
+
 # Import necessary packages
 import pandas as pd 
 from rdkit import Chem
