@@ -4,7 +4,6 @@
 # Import necessary packages
 import pandas as pd 
 from rdkit import Chem
-from rdkit.Chem import AllChem
 
 # Canonicalize SMILES strings and add as a new column
 def get_canonical_smiles(smiles):
@@ -144,7 +143,7 @@ def csv_to_sdf(csv):
             n_written += 1
 
     writer.close()
-    
+
     print(f"{n_written} molecules successfully written to 'cleaned_pfas_list.sdf'.")
     return n_written
 
