@@ -1,4 +1,4 @@
-# Get 100 sample entries from the cleaned PFAS dataset 'cleaned_pfas_list.csv'
+# Get 500 sample entries from the cleaned PFAS dataset 'cleaned_pfas_list.csv'
 
 # Import necessary packages
 import pandas as pd
@@ -98,7 +98,7 @@ def csv_to_sdf(csv):
     return n_written
 
 # Use function to get samples
-get_samples('cleaned_pfas_list.csv')
+get_samples('cleaned_pfas_list.csv', n_samples=500)
 
 # Convert the sampled CSV to SDF
 csv_to_sdf('pfas_samples.csv')
