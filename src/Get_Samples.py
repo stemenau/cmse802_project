@@ -1,20 +1,29 @@
+"""
+Module for selecting a sample subset of a dataset.
+
+This module contains functions for selecting a random sample of entries from a dataset.
+The module outputs sample data to CSV and SDF formats for further analysis.
+
+Author: Audrey Stemen (stemenau@msu.edu)
+Date: October 2025
+"""
 # Import necessary packages
 import pandas as pd
 from rdkit import Chem
 
-def get_samples(csv, n_samples=100, random_state=42):
+def get_samples(csv, n_samples=1000, random_state=42):
     """
-    Randomly sample a subset of entries from a cleaned PFAS dataset.
+    Randomly sample a subset of entries from a cleaned dataset.
 
-    This function reads a cleaned CSV file of PFAS compounds, randomly 
+    This function reads a cleaned CSV file of compounds, randomly 
     selects a specified number of entries, and saves the subset to a new 
-    CSV file named `'pfas_samples.csv'`.
+    CSV file named 'data_samples.csv'.
 
     Parameters
     ----------
     csv : str
-        Path to the input CSV file containing the cleaned PFAS dataset.
-    n_samples : int, default=100
+        Path to the input CSV file containing the cleaned dataset.
+    n_samples : int, default=1000
         Number of samples to randomly select from the dataset.
     random_state : int, default=42
         Random seed for reproducibility of the sampling process.
@@ -26,25 +35,25 @@ def get_samples(csv, n_samples=100, random_state=42):
 
     Notes
     -----
-    - The output file `'pfas_samples.csv'` is saved in the current working directory.
+    - The output file 'data_samples.csv' is saved in the current working directory.
     - The sampling process is reproducible due to the fixed random seed.
     """
     # Read the cleaned PFAS dataset
-    df = pd.read_csv(csv)
+    data = pd.read_csv(csv)
 
     # Randomly sample n_samples entries
-    sampled_df = df.sample(n=n_samples, random_state=random_state)
+    sampled_data = data.sample(n=n_samples, random_state=random_state)
 
     # Export the sampled entries to a new CSV file
-    sampled_df.to_csv('pfas_samples.csv', index=False)
+    sampled_data.to_csv('../data/data_samples.csv', index=False)
 
-    return sampled_df
+    return sampled_data
 
 def csv_to_sdf(csv):
     """
     Convert a CSV file containing SMILES strings into an SDF file.
 
-    This function reads a CSV file ('pfas_samples.csv') 
+    This function reads a CSV file ('data_samples.csv') 
     containing a column named 'Canonical SMILES', converts each valid 
     SMILES string to an RDKit molecule, and writes all molecules to 
     an SDF file.
@@ -68,23 +77,23 @@ def csv_to_sdf(csv):
       absolute path is provided.
     """
     # Read CSV file into a DataFrame
-    df = pd.read_csv(csv)
+    data = pd.read_csv(csv)
 
     # Ensure the expected SMILES column exists
-    if 'Canonical SMILES' not in df.columns:
+    if 'Canonical SMILES' not in data.columns:
         raise ValueError("Input CSV must contain a 'Canonical SMILES' column.")
 
     # Create SDF writer to edit SDF file within working directory
-    writer = Chem.SDWriter('pfas_samples.sdf')
+    writer = Chem.SDWriter('data_samples.sdf')
     n_written = 0
 
     # Convert SMILES to molecules and write to SDF
-    for _, row in df.iterrows(): # Index does not matter here
+    for _, row in data.iterrows(): # Index does not matter here
         smiles = row['Canonical SMILES']
         mol = Chem.MolFromSmiles(smiles)
         if mol:
             # Add properties to the molecule
-            for col in df.columns:
+            for col in data.columns:
                 if col != 'Canonical SMILES':
                     mol.SetProp(col, str(row[col]))
             writer.write(mol)
@@ -92,11 +101,15 @@ def csv_to_sdf(csv):
 
     writer.close()
 
-    print(f"{n_written} molecules successfully written to 'pfas_samples.sdf'.")
+    print(f"{n_written} molecules successfully written to 'data_samples.sdf'.")
     return n_written
 
-# Use function to get 1000 samples (~10% of cleaned dataset)
-get_samples('cleaned_pfas_list.csv', n_samples=1000)
+def main():
+    # Get a random sample of the cleaned data
+    sampled_data = get_samples('../data/data_cleaned.csv')
 
-# Convert the sampled CSV to SDF
-csv_to_sdf('pfas_samples.csv')
+    # Convert sampled CSV to SDF
+    csv_to_sdf('../data/data_samples.csv')
+
+if __name__ == "__main__":
+    main()
