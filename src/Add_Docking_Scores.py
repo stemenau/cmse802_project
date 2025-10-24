@@ -1,17 +1,28 @@
+"""
+Module for adding calculated molecular docking scores to a dataset from a separate CSV file.
+
+This module contains a function for adding docking scores as a new column to a dataset.
+The module outputs the updated dataset to a CSV file.
+
+Author: Audrey Stemen (stemenau@msu.edu)
+Date: October 2025
+"""
 # Import necessary packages
 import pandas as pd
 import numpy as np
 
 def add_docking_scores(csv, docking_scores_csv):
     """
-    Adds docking scores from a secondary CSV file to a main sample dataset.
+    Adds docking scores from a secondary CSV file to a main dataset.
 
-    This function reads two CSV files: one containing PFAS sample data (`csv`)
-    and another containing docking scores (`docking_scores_csv`). The function
-    aligns the rows using the 'Index' column from the docking score file and 
-    inserts the corresponding docking scores into the main dataset as a new 
-    column named 'Docking Score'. The updated dataset is then saved as a new 
-    file named 'pfas_samples_scores.csv'.
+    This function reads two CSV files: one containing the main data ('csv')
+    and another containing docking scores ('docking_scores_csv') calculated from
+    molecular docking simulations. The function aligns the rows using the 'Index'
+    column from the docking score file and inserts the corresponding docking scores
+    into the main dataset as a new column named 'Docking Score'. Rows for which no
+    docking score is found will be assigned NaN values in the 'Docking Score' column 
+    and subsequently dropped. The updated dataset is then saved as a new file named 
+    'data_complete.csv'.
 
     Parameters
     ----------
@@ -29,22 +40,29 @@ def add_docking_scores(csv, docking_scores_csv):
 
     Notes
     -----
-    The output CSV file ('pfas_samples_scores.csv') is saved in the current 
+    The output CSV file ('data_complete.csv') is saved in the current 
     working directory. Ensure that the 'Index' column in the docking scores 
     file corresponds correctly to the row indices in the main dataset.
     """
     # Read the input CSV files
-    df = pd.read_csv(csv)
+    data = pd.read_csv(csv)
     docking_scores = pd.read_csv(docking_scores_csv)
 
     # Add docking scores to the main dataframe as a new column
-    for i, j in zip(range(len(df)), docking_scores['Index']):
-        df.loc[j,'Docking Score'] = docking_scores.loc[i,'S']
+    for i, j in zip(range(len(data)), docking_scores['Index']):
+        data.loc[j,'Docking Score'] = docking_scores.loc[i,'S']
+
+    # Drop rows with NaN docking scores
+    data = data.dropna(subset=['Docking Score'])
 
     # Save the updated dataframe to a new CSV file
-    df.to_csv('pfas_samples_scores.csv', index=False)
+    data.to_csv('data_complete.csv', index=False)
 
-    return df
+    return data
 
-# Add docking scores to the samples CSV
-add_docking_scores('pfas_samples.csv', 'samples_docking_scores.csv')
+def main():
+    # Add docking scores to the sample data
+    updated_data = add_docking_scores('../data/data_preprocessed.csv', '../data/docking_scores.csv')
+
+if __name__ == "__main__":
+    main()
