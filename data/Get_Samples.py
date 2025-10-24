@@ -1,5 +1,3 @@
-# Get 500 sample entries from the cleaned PFAS dataset 'cleaned_pfas_list.csv'
-
 # Import necessary packages
 import pandas as pd
 from rdkit import Chem
@@ -97,8 +95,8 @@ def csv_to_sdf(csv):
     print(f"{n_written} molecules successfully written to 'pfas_samples.sdf'.")
     return n_written
 
-# Use function to get samples
-get_samples('cleaned_pfas_list.csv', n_samples=500)
+# Use function to get 1000 samples (~10% of cleaned dataset)
+get_samples('cleaned_pfas_list.csv', n_samples=1000)
 
 # Convert the sampled CSV to SDF
 csv_to_sdf('pfas_samples.csv')
