@@ -75,17 +75,17 @@ def clean_data(csv):
     # Read CSV file into a Pandas DataFrame
     data_init = pd.read_csv(csv)
 
-    # Remove unnecessary columns
-    data_trunc= data_init.drop(columns=['DTXSID','INCHIKEY','IUPAC NAME','INCHI STRING','MONOISOTOPIC MASS','QC Level','# ToxCast Active','Total Assays','% ToxCast Active'])
-        
     # Remove rows with missing SMILES strings
-    data_trunc = data_trunc.dropna(subset=['SMILES']).reset_index(drop=True)
+    data = data_init.dropna(subset=['SMILES']).reset_index(drop=True)
 
     # Canonicalize SMILES strings and add as a new column
-    data_trunc['Canonical SMILES'] = data_trunc['SMILES'].apply(get_canonical_smiles)
+    data['Canonical SMILES'] = data['SMILES'].apply(get_canonical_smiles)
+
+    # Remove all columns except 'Canonical SMILES'
+    data = data[['Canonical SMILES']]
 
     # Remove duplicate SMILES entries
-    data = data_trunc.drop_duplicates(subset=['Canonical SMILES'], keep='first').reset_index(drop=True)
+    data = data.drop_duplicates(subset=['Canonical SMILES'], keep='first').reset_index(drop=True)
 
     # Remove rows where canonical SMILES could not be generated
     data = data.dropna(subset=['Canonical SMILES']).reset_index(drop=True)
