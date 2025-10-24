@@ -33,6 +33,7 @@ def plot_histograms(data):
 # Pairplots - visually identify any relationships between features
 def plot_pairplots(data):
     sns.pairplot(data)
+    plt.tight_layout()
     plt.savefig('pairplots.png')
 
 # Spearman correlation matrix - identify monotonic relationships between features
@@ -41,6 +42,7 @@ def plot_spearman_correlation(data):
     plt.figure(figsize=(12, 10))
     sns.heatmap(corr, annot=True)
     plt.title('Spearman Correlation Matrix')
+    plt.tight_layout()
     plt.savefig('spearman_correlation.png')
 
 def main(): 
