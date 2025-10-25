@@ -5,6 +5,11 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 import matplotlib.pyplot as plt
+import sys
+
+module_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../src"))
+if module_path not in sys.path:
+    sys.path.append(module_path)
 
 # Import your class
 from Linear_Regression import LinearRegressionModel

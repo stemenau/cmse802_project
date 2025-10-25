@@ -2,6 +2,11 @@ import os
 import pandas as pd
 import pytest
 import numpy as np
+import sys
+
+module_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../src"))
+if module_path not in sys.path:
+    sys.path.append(module_path)
 
 # Import the function
 from Add_Docking_Scores import add_docking_scores

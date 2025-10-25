@@ -2,6 +2,11 @@ import os
 import pandas as pd
 import pytest
 from rdkit import Chem
+import sys
+
+module_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../src"))
+if module_path not in sys.path:
+    sys.path.append(module_path)
 
 # Import functions from your module
 from Data_Prep import (

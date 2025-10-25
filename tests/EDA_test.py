@@ -1,6 +1,11 @@
 import os
 import pandas as pd
 import pytest
+import sys
+
+module_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../src"))
+if module_path not in sys.path:
+    sys.path.append(module_path)
 
 # Import functions from your EDA module
 from EDA import load_data, plot_histograms, plot_pairplots, plot_spearman_correlation
