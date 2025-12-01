@@ -11,7 +11,7 @@ Date: October 2025
 import pandas as pd
 import numpy as np
 
-def add_docking_scores(csv, docking_scores_csv, output_csv):
+def add_docking_scores(csv, docking_scores_csv, output_csv, drop_na=True):
     """
     Adds docking scores from a secondary CSV file to a main dataset.
 
@@ -54,8 +54,12 @@ def add_docking_scores(csv, docking_scores_csv, output_csv):
     for i, j in zip(range(len(data)), docking_scores['Index']):
         data.loc[j,'Docking Score'] = docking_scores.loc[i,'S']
 
-    # Drop rows with NaN docking scores
-    data = data.dropna(subset=['Docking Score'])
+    if drop_na == True:
+        # Drop rows where 'Docking Score' is NaN
+        data = data.dropna(subset=['Docking Score'])
+    elif drop_na == False:
+        # Keep all rows
+        pass
 
     # Save the updated dataframe to a new CSV file
     data.to_csv(output_csv, index=False)
