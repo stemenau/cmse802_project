@@ -22,19 +22,19 @@ def load_data(csv):
 
 # Histograms of feature values - visualize distributions of each feature
 def plot_histograms(data):
-    fig, ax = plt.subplots(3, 3, figsize=(15, 15))
+    fig, ax = plt.subplots(3, 4, figsize=(20, 15))
     n_cols = len(data.columns)
     colors = sns.color_palette("rocket", n_colors=n_cols)
     for i, col in enumerate(data.columns):
-        sns.histplot(data[col], bins=30, color=colors[i], ax=ax[i // 3, i % 3])
+        sns.histplot(data[col], bins=30, color=colors[i], ax=ax[i // 4, i % 4])
     plt.tight_layout()
-    plt.savefig('histograms.png')
+    plt.savefig('histograms.png', dpi=300)
 
 # Pairplots - visually identify any relationships between features
 def plot_pairplots(data):
     sns.pairplot(data)
     plt.tight_layout()
-    plt.savefig('pairplots.png')
+    plt.savefig('pairplots.png', dpi=300)
 
 # Spearman correlation matrix - identify monotonic relationships between features
 def plot_spearman_correlation(data):
@@ -43,7 +43,7 @@ def plot_spearman_correlation(data):
     sns.heatmap(corr, annot=True)
     plt.title('Spearman Correlation Matrix')
     plt.tight_layout()
-    plt.savefig('spearman_correlation.png')
+    plt.savefig('spearman_correlation.png', dpi=300)
 
 def main(): 
     data = load_data('data_complete.csv')
