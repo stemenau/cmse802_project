@@ -203,14 +203,14 @@ class LinearRegressionModel:
         # Plot actual vs predicted values
         plt.figure(figsize=(10, 6))
         plt.scatter(self.y_test, self.y_pred, alpha=0.8)
-        plt.xlabel('Actual Values')
-        plt.ylabel('Predicted Values')
-        plt.title('Actual vs Predicted Values')
+        plt.xlabel('Actual Values', fontsize=16)
+        plt.ylabel('Predicted Values', fontsize=16)
+        plt.title('Actual vs Predicted Values', fontsize=20)
         plt.plot([self.y_test.min(), self.y_test.max()], [self.y_test.min(), self.y_test.max()], 'k--', lw=2)
         # Print MSE and R^2 on the plot
         mse = mean_squared_error(self.y_test, self.y_pred)
         r2 = r2_score(self.y_test, self.y_pred)
-        plt.text(0.75, 0.25, f'MSE: {mse:.2f}\nR²: {r2:.2f}', fontsize=12, 
+        plt.text(0.75, 0.25, f'MSE: {mse:.2f}\nR²: {r2:.2f}', fontsize=14, 
                  verticalalignment='top', transform=plt.gca().transAxes)
         plt.savefig('lr_actual_vs_predicted.png')
         plt.close() # Ensure that formatting does not carry over for SHAP plot
