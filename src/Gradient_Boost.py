@@ -1,5 +1,5 @@
 """
-This module implements a linear regression model to predict a target variable from a dataset.
+This module implements a gradient boosted regression model to predict a target variable from a dataset.
 
 It includes data loading, preprocessing, model training, evaluation, and explanation using SHAP.
 Plots are generated to visualize actual vs predicted values and feature importance by SHAP values.
@@ -9,18 +9,18 @@ Plots are generated to visualize actual vs predicted values and feature importan
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 import shap
 
-class RandomForestModel:
+class GradientBoostModel:
     def __init__(self, data_path):
         """
-        Initialize a Random Forest Regression model instance and prepare data attributes.
+        Initialize a Gradient Boost Regression model instance and prepare data attributes.
 
         This constructor sets up the initial configuration for a regression model
         by storing the path to the input dataset, initializing a scikit-learn
-        'RandomForestRegressor' model, and creating placeholders for training and test
+        'GradientBoostingRegressor' model, and creating placeholders for training and test
         datasets as well as prediction outputs.
 
         Parameters
@@ -33,8 +33,8 @@ class RandomForestModel:
         ----------
         data_path : str
             The path to the dataset used for training and testing.
-        model : sklearn.linear_model.RandomForestRegressor
-            The initialized random forest regression model.
+        model : sklearn.ensemble.RandomForestRegressor
+            The initialized gradient boosted regression model.
         X_train : pandas.DataFrame or numpy.ndarray, optional
             The feature matrix for training (initialized as None).
         X_test : pandas.DataFrame or numpy.ndarray, optional
@@ -52,7 +52,7 @@ class RandomForestModel:
         - The model is not fitted during initialization.
         """
         self.data_path = data_path
-        self.model = RandomForestRegressor()
+        self.model = GradientBoostingRegressor()
         self.X_train = None
         self.X_test = None
         self.y_train = None
@@ -113,9 +113,9 @@ class RandomForestModel:
 
     def train_model(self):
         """
-        Train the linear regression model on the prepared training data.
+        Train the gradient boosted regression model on the prepared training data.
 
-        This method fits the initialized 'LinearRegression' model using
+        This method fits the initialized 'GradientBoostingRegressor' model using
         the training feature matrix ('X_train') and corresponding target
         values ('y_train'). The trained model is stored as an instance
         attribute and can be used for prediction and further analysis.
@@ -135,7 +135,7 @@ class RandomForestModel:
         - The fitted model is stored in 'self.model' and can be accessed
         for evaluation, prediction, or SHAP explanation.
         """
-        # Train the linear regression model
+        # Train the gradient boosted regression model
         self.model.fit(self.X_train, self.y_train)
 
     def evaluate_model(self):
@@ -183,7 +183,7 @@ class RandomForestModel:
         values against the actual target values for the test dataset.
         A reference diagonal line is included to indicate perfect prediction.
         The plot also displays MSE and R² metrics for quick interpretation
-        and is saved as 'rf_actual_vs_predicted.png' in the working directory.
+        and is saved as 'gb_actual_vs_predicted.png' in the working directory.
 
         Parameters
         ----------
@@ -202,7 +202,7 @@ class RandomForestModel:
         """
         # Plot actual vs predicted values
         plt.figure(figsize=(10, 6))
-        plt.scatter(self.y_test, self.y_pred, color = 'r', alpha=0.8)
+        plt.scatter(self.y_test, self.y_pred, color = 'g', alpha=0.8)
         plt.xlabel('Actual Values', fontsize=16)
         plt.ylabel('Predicted Values', fontsize=16)
         plt.title('Actual vs Predicted Values', fontsize=20)
@@ -212,7 +212,7 @@ class RandomForestModel:
         r2 = r2_score(self.y_test, self.y_pred)
         plt.text(0.75, 0.25, f'MSE: {mse:.2f}\nR²: {r2:.2f}', fontsize=14, 
                  verticalalignment='top', transform=plt.gca().transAxes)
-        plt.savefig('rf_actual_vs_predicted.png')
+        plt.savefig('gb_actual_vs_predicted.png')
         plt.close() # Ensure that formatting does not carry over for SHAP plot
 
     def explain_model(self):
@@ -220,10 +220,10 @@ class RandomForestModel:
         Generate SHAP (SHapley Additive exPlanations) values to interpret model predictions.
 
         This method applies SHAP to compute feature importance values for
-        the trained linear regression model using the test dataset.
+        the trained gradient boosted regression model using the test dataset.
         It then produces a SHAP summary plot visualizing the contribution
         of each feature to the model’s predictions and saves the figure
-        as 'rf_shap_summary.png'.
+        as 'gb_shap_summary.png'.
 
         Parameters
         ----------
@@ -247,27 +247,27 @@ class RandomForestModel:
         
         # Plot SHAP summary
         shap.summary_plot(shap_values, self.X_test, show=False)
-        plt.savefig('rf_shap_summary.png')
+        plt.savefig('gb_shap_summary.png')
 
 def main():
     # Initialize model with data path
     data_path = 'data_complete.csv'
-    rf_model = RandomForestModel(data_path)
+    gb_model = GradientBoostModel(data_path)
     
     # Load and preprocess data
-    rf_model.load_and_preprocess_data()
+    gb_model.load_and_preprocess_data()
     
     # Train the model
-    rf_model.train_model()
+    gb_model.train_model()
     
     # Evaluate the model
-    rf_model.evaluate_model()
+    gb_model.evaluate_model()
     
     # Plot results
-    rf_model.plot_results()
+    gb_model.plot_results()
     
     # Explain model predictions
-    rf_model.explain_model()
+    gb_model.explain_model()
 
 if __name__ == '__main__':
     main()

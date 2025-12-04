@@ -56,7 +56,7 @@ def add_docking_scores(csv, docking_scores_csv, output_csv, drop_na=True):
 
     if drop_na == True:
         # Drop rows where 'Docking Score' is NaN
-        data = data.dropna(subset=['Docking Score'])
+        data.dropna(subset=['Docking Score'], inplace=True)
     elif drop_na == False:
         # Keep all rows
         pass
